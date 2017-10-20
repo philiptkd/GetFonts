@@ -10,7 +10,7 @@ setlocal enabledelayedexpansion
 rem - for every .ttf file in Fonts/
 for %%f in (Fonts/*.ttf) do (	
 rem - make a folder named after the .ttf file
-	md Fonts\%%~nf			
+	md Fonts\%%~nf
 	
 	rem - 48-57 are the characters '0'-'9'
 	for /l %%x in (48, 1, 57) do (	
