@@ -45,50 +45,49 @@ def getCOM(valueList, height, width):
 
     return (int(xBar), int(yBar))   #both rouned down to put the center of mass within the right pixel
 
-fontName = str(sys.argv[1])     #get the first argument as the font name
-fileName = str(sys.argv[2])     #get the second argument as the fileName
-currentDir = os.getcwd()        #returns a string of the current directory
-currentDir = currentDir.replace('\\','/');  #formats directory name
+def getCSV(fontName, fileName):
+    currentDir = os.getcwd()        #returns a string of the current directory
+    currentDir = currentDir.replace('\\','/');  #formats directory name
 
-fullFileName = currentDir + '/Fonts/' + str(fontName) + '/' + str(fileName)
+    fullFileName = currentDir + '/Fonts/' + str(fontName) + '/' + str(fileName)
 
-im = Image.open(fullFileName).convert('L')    ##convert to greyscale
-mi = ImageOps.invert(im)       #invert to get number to be nonzero
-cropped = mi.crop(mi.getbbox())    #replace 'box' with a 4-tuple
-null, null, width, height = cropped.getbbox()    #store width and length
+    im = Image.open(fullFileName).convert('L')    ##convert to greyscale
+    mi = ImageOps.invert(im)       #invert to get number to be nonzero
+    cropped = mi.crop(mi.getbbox())    #replace 'box' with a 4-tuple
+    null, null, width, height = cropped.getbbox()    #store width and length
 
-if(height > width):
-    newHeight = 20
-    newWidth = 20*width/height
-else:
-    newWidth = 20
-    newHeight = 20*height/width
+    if(height > width):
+        newHeight = 20
+        newWidth = 20*width/height
+    else:
+        newWidth = 20
+        newHeight = 20*height/width
 
-newWidth = int(newWidth)                #rounding introduces a little error
-newHeight = int(newHeight)
+    newWidth = int(newWidth)                #rounding introduces a little error
+    newHeight = int(newHeight)
 
-resized = cropped.resize((newWidth,newHeight))
+    resized = cropped.resize((newWidth,newHeight))
 
-#get coordinates of center of mass
-xBar, yBar = getCOM(list(resized.getdata()), newHeight, newWidth)
+    #get coordinates of center of mass
+    xBar, yBar = getCOM(list(resized.getdata()), newHeight, newWidth)
 
-#create 28x28 canvas
-canvas = Image.new('L', (28,28))
+    #create 28x28 canvas
+    canvas = Image.new('L', (28,28))
 
-#get upper left corner of character on canvas
-(x,y) = (13 - xBar, 13 - yBar)      #xBar and yBar should never be more than 13
+    #get upper left corner of character on canvas
+    (x,y) = (13 - xBar, 13 - yBar)      #xBar and yBar should never be more than 13
 
-#paste character onto canvas
-canvas.paste(resized, (x,y))
+    #paste character onto canvas
+    canvas.paste(resized, (x,y))
 
-#getdata() -> save as csv
-dataList = list(canvas.getdata())
+    #getdata() -> save as csv
+    dataList = list(canvas.getdata())
 
-with open(currentDir + '/Fonts/' + str(fontName) + '/' + str(fontName) + '.csv', 'a+') as myfile:
-    wr = csv.writer(myfile)
-    for i in range(0,28):
-        row = list([dataList[i*28 + j] for j in range(0,28)])
-        wr.writerow(row)
-    myfile.close()
+    with open(currentDir + '/Fonts/' + str(fontName) + '/' + str(fontName) + '.csv', 'a+') as myfile:
+        wr = csv.writer(myfile)
+        for i in range(0,28):
+            row = list([dataList[i*28 + j] for j in range(0,28)])
+            wr.writerow(row)
+        myfile.close()
 
 #TODO: write file to CSV all on one line, appending if it already exists

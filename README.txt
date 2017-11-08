@@ -1,7 +1,7 @@
 Converts every .ttf file in the Fonts/ folder into a .csv with one line per digit 0-9
 Each digit is size-normalized to 20x20 and centered by mass in a 28x28 field
 
-Call script.bat from the command line (on Windows).
+Call script.py to start
 
 It uses bmfont.exe to output .png files for each digit 0-9 in the font specified.
 It uses ttx command from python package fonttools to rename fonts within .ttf files.
