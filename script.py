@@ -38,7 +38,7 @@ for font in fontList:
             #edit the config file to update the character we want a .png of
             replace('config.bmfc', 'chars=..', 'chars='+str(charNum))
 
-            #call mbfont to create the .png
+            #call bmfont to create the .png
             subprocess.run(['bmfont.com', '-c', 'config.bmfc', '-o', 'Fonts/'+font+'/'+str(charNum-48)+'.fnt'])
 
             #call getCSV.py with arguments font and str(charNum-48)+'_0.png'
