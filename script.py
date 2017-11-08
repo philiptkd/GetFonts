@@ -2,10 +2,11 @@
 
 from os import listdir, getcwd, makedirs, remove, rename
 from os.path import isfile, join, exists
+import subprocess
 from replace import replace
 from changeFontName import changeFontName
 from getCSV import getCSV
-import subprocess
+from transform import transform
 
 #get current working directory
 cwd = getcwd()
@@ -41,9 +42,6 @@ for font in fontList:
             #call bmfont to create the .png
             subprocess.run(['bmfont.com', '-c', 'config.bmfc', '-o', 'Fonts/'+font+'/'+str(charNum-48)+'.fnt'])
 
-            #call getCSV.py with arguments font and str(charNum-48)+'_0.png'
-            getCSV(font, str(charNum-48)+'_0.png')
-
         #delete all the .fnt files
         for f in listdir(thisFontDir):
             if isfile(join(thisFontDir,f)) and f[-4:] == '.fnt':
@@ -54,3 +52,10 @@ for font in fontList:
             if isfile(join(thisFontDir,f)) and f[-4:] == '.png':
                 rename(join(thisFontDir,f), join(thisFontDir,f[0]+'.png'))
 
+        #transform every .png in a directory into ~300 translated and rotated versions of itself
+        transform(thisFontDir)
+
+        #put into a CSV
+        for f in listdir(thisFontDir):
+            if isfile(join(thisFontDir,f)) and f[-4:] == '.png':
+                getCSV(font, f)

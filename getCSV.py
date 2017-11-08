@@ -30,12 +30,17 @@ def getCOM(valueList, height, width):
     yBar = sumYZ/sumZ
 
 
-    row = [0]*height                  #a single row to hold column vectors
+    row = [0]*width                  #a single row to hold column vectors
     for i in range(0, width):
         colSum = 0
         for j in range(0, height):
             colSum = colSum + valueList[j*width + i]
-        row[i] = colSum;
+        try:
+            row[i] = colSum;
+        except IndexError:
+            print(i)
+            print(width)
+            raise(IndexError)
     #sumZ is the same
 
     sumXZ = 0
