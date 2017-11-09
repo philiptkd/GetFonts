@@ -89,10 +89,11 @@ def getCSV(fontName, fileName):
     dataList = list(canvas.getdata())
 
     with open(currentDir + '/Fonts/' + str(fontName) + '/' + str(fontName) + '.csv', 'a+') as myfile:
-        wr = csv.writer(myfile)
-        for i in range(0,28):
-            row = list([dataList[i*28 + j] for j in range(0,28)])
-            wr.writerow(row)
+        wr = csv.writer(myfile, lineterminator='\n')
+        row = [fileName[0]]
+        for i in range(len(dataList)):
+            row.append(dataList[i])
+        wr.writerow(row)
         myfile.close()
 
 #TODO: write file to CSV all on one line, appending if it already exists
